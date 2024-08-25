@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Pooling App</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="app.js" defer></script>
+    <style>
+        /* General Styles */
+        body {
+            background-image: url('02_ss300p_3i4_front.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            font-family: Arial, sans-serif;
+            color: white;
+            padding: 20px;
+        }
+
+        h1, h2 {
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px; /* Space between the forms */
+        }
+
+        .form-and-response {
+            display: flex;
+            flex: 1 1 45%;
+            gap: 20px; /* Space between form and response area */
+            box-sizing: border-box;
+        }
+
+        .form-container {
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            flex: 1; /* Allows form to take up available space */
+        }
+
+        /* Form Styles */
+        form {
+            display: flex;
+            flex-direction: column; /* Stack elements vertically */
+            gap: 15px; /* Space between form elements */
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input, select {
+            width: 100%; /* Make inputs and selects take full width */
+            max-width: 250px; /* Adjust maximum width to make fields smaller */
+            padding: 8px; /* Add padding for better appearance */
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%; /* Make the button take full width */
+            max-width: 200px; /* Adjust maximum width as needed */
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .response-area {
+            background-color: #333;
+            padding: 10px;
+            border-radius: 5px;
+            max-height: 300px; /* Adjust based on your needs */
+            overflow-y: auto; /* Adds scrollbar if content exceeds max-height */
+            flex: 1; /* Allows response area to take up available space */
+        }
+
+        /* Media query for smaller screens */
+        @media (max-width: 768px) {
+            .form-and-response {
+                flex-direction: column; /* Stack form and response area on small screens */
+                gap: 10px;
+            }
+
+            .response-area {
+                max-height: none; /* Remove max-height for small screens */
+            }
+        }
+    </style>
+</head>
+<body>
+<h1>Car Pooling App</h1>
+
+<div class="container">
+    <!-- Register Car Owner -->
+    <div class="form-and-response">
+        <div class="form-container">
+            <h2>Register Car Owner</h2>
+            <form id="registerForm">
+                <label for="name">Name: <span style="color: red;">*</span></label>
+                <input type="text" id="name" name="name" required>
+
+                <label for="email">Email: <span style="color: red;">*</span></label>
+                <input type="email" id="email" name="email" required>
+
+                <label for="phone">Phone: <span style="color: red;">*</span></label>
+                <input type="text" id="phone" name="phone" required>
+
+                <label for="vehicleModel">Vehicle Model:</label>
+                <input type="text" id="vehicleModel" name="vehicleModel">
+
+                <label for="licensePlate">License Plate:</label>
+                <input type="text" id="licensePlate" name="licensePlate">
+
+                <button type="submit">Register</button>
+            </form>
+        </div>
+        <div class="response-area" id="registerResponse"></div>
+    </div>
+
+    <!-- Update Car Owner -->
+    <div class="form-and-response">
+        <div class="form-container">
+            <h2>Update Car Owner</h2>
+            <form id="updateForm">
+                <label for="carOwnerId">Car Owner ID: <span style="color: red;">*</span></label>
+                <input type="number" id="carOwnerId" name="carOwnerId" required>
+
+                <label for="updateName">Name:</label>
+                <input type="text" id="updateName" name="name">
+
+                <label for="updateEmail">Email:</label>
+                <input type="email" id="updateEmail" name="email">
+
+                <label for="updatePhone">Phone:</label>
+                <input type="text" id="updatePhone" name="phone">
+
+                <label for="updateVehicleModel">Vehicle Model:</label>
+                <input type="text" id="updateVehicleModel" name="vehicleModel">
+
+                <label for="updateLicensePlate">License Plate:</label>
+                <input type="text" id="updateLicensePlate" name="licensePlate">
+
+                <button type="submit">Update</button>
+            </form>
+        </div>
+        <div class="response-area" id="updateResponse"></div>
+    </div>
+
+    <!-- Get CarOwner details -->
+    <div class="form-and-response">
+        <div class="form-container">
+            <h2>Get Car Owner Details</h2>
+            <form id="getCarOwnerDetails">
+                <label for="carOwnerIdk">Car Owner ID: <span style="color: red;">*</span></label>
+                <input type="number" id="carOwnerIdk" name="carOwnerId" required>
+
+                <button type="submit">Get Details</button>
+            </form>
+        </div>
+        <div class="response-area" id="getCarOwnerResponse"></div>
+    </div>
+
+    <!-- Create Journey Form -->
+    <div class="form-and-response">
+        <div class="form-container">
+            <h2>Create Journey</h2>
+            <form id="createJourneyForm">
+                <label for="ownerId">Car Owner ID: <span class="required">*</span></label>
+                <input type="number" id="ownerId" name="carOwnerId" required>
+
+                <label for="startPoint">Start Point: <span class="required">*</span></label>
+                <select id="startPoint" name="startPoint" required>
+                    <!-- Options will be populated by JavaScript -->
+                </select>
+
+                <label for="endPoint">End Point: <span class="required">*</span></label>
+                <select id="endPoint" name="endPoint" required>
+                    <!-- Options will be populated by JavaScript -->
+                </select>
+
+                <label for="seats">Available Seats: <span class="required">*</span></label>
+                <input type="number" id="seats" name="availableSeats" required>
+
+                <label for="startTime">Start Time: <span class="required">*</span></label>
+                <input type="datetime-local" id="startTime" name="startTime" required>
+
+                <label for="status">Journey Status: <span class="required">*</span></label>
+                <select id="status" name="status" required>
+                    <option value="NOT_STARTED">Not Started</option>
+                    <option value="IN_PROGRESS">In Progress</option>
+                    <option value="COMPLETED">Completed</option>
+                </select>
+
+                <button type="submit">Create Journey</button>
+            </form>
+        </div>
+        <div class="response-area" id="createJourneyResponse"></div>
+    </div>
+
+    <!-- Update Journey Form -->
+    <div class="form-and-response">
+        <div class="form-container">
+            <h2>Update Journey</h2>
+            <form id="updateJourneyForm">
+                <label for="carOwnerId">Car Owner ID:</label>
+                <input type="number" id="carOwnerIdL" name="carOwnerId" required>
+
+                <label for="journeyId">Journey ID:</label>
+                <input type="number" id="journeyId" name="journeyId" required>
+
+                <label for="updateStartPoint">Start Point:</label>
+                <select id="updateStartPoint" name="startPoint">
+                    <!-- Options will be populated by JavaScript -->
+                </select>
+
+                <label for="updateEndPoint">End Point:</label>
+                <select id="updateEndPoint" name="endPoint">
+                    <!-- Options will be populated by JavaScript -->
+                </select>
+
+                <label for="updateSeats">Available Seats:</label>
+                <input type="number" id="updateSeats" name="seats">
+
+                <label for="updateStatus">Journey Status:</label>
+                <select id="updateStatus" name="status" required>
+                    <option value="NOT_STARTED">Not Started</option>
+                    <option value="IN_PROGRESS">In Progress</option>
+                    <option value="COMPLETED">Completed</option>
+                </select>
+
+                <button type="submit">Update Journey</button>
+            </form>
+        </div>
+        <div class="response-area" id="updateJourneyResponse"></div>
+    </div>
+
+    <!-- View Journey Details -->
+    <div class="form-and-response">
+        <div class="form-container">
+            <h2>View Journey Details</h2>
+            <form id="viewJourneyForm">
+                <label for="viewJourneyId">Journey ID:</label>
+                <input type="number" id="viewJourneyId" name="journeyId" required>
+                <button type="submit">View Journey</button>
+            </form>
+        </div>
+        <div class="response-area" id="viewJourneyResponse"></div>
+    </div>
+
+    <!-- View Journeys By Owner -->
+    <div class="form-and-response">
+        <div class="form-container">
+            <h2>View Journeys by Car Owner</h2>
+            <form id="viewJourneysByOwnerForm">
+                <label for="ownerIdView">Car Owner ID:</label>
+                <input type="number" id="ownerIdView" name="ownerId" required>
+                <button type="submit">View Journeys</button>
+            </form>
+        </div>
+        <div class="response-area" id="viewJourneysByOwnerResponse"></div>
+    </div>
+
+    <!-- Journeys By Car Owner -->
+
+    <div class="form-and-response">
+        <div class="form-container">
+            <h2>Get Journeys by Car Owner</h2>
+            <form id="getJourneysForm">
+                <label for="carOwnerId">Car Owner ID:</label>
+                <input type="number" id="carOwnerIdJ" name="carOwnerIdJ" required>
+                <button type="submit">Get Journeys</button>
+            </form>
+        </div>
+        <div class="response-area" id="journeysResponse"></div>
+    </div>
+
+    <!-- Join Journey -->
+    <div class="form-and-response">
+        <div class="form-container">
+            <h2>Join Journey</h2>
+            <form id="joinJourneyForm">
+                <label for="journeyIdJoin">Journey ID:</label>
+                <input type="number" id="journeyIdJoin" name="journeyId" required>
+
+                <label for="riderId">Rider ID:</label>
+                <input type="number" id="riderId" name="riderId" required>
+
+                <label for="pickupLocation">Pickup Location:</label>
+                <select id="pickupLocation" name="pickupLocation" required>
+                    <!-- Options will be populated by JavaScript -->
+                </select>
+
+                <label for="dropoffLocation">Dropoff Location:</label>
+                <select id="dropoffLocation" name="dropoffLocation" required>
+                    <!-- Options will be populated by JavaScript -->
+                </select>
+
+                <button type="submit">Join Journey</button>
+            </form>
+        </div>
+        <div class="response-area" id="joinJourneyResponse"></div>
+    </div>
+
+    <!-- Respond to Ride Request -->
+    <div class="form-and-response">
+        <div class="form-container">
+            <h2>Respond to Ride Request</h2>
+            <form id="respondToRequestForm">
+                <label for="rideRequestId">Ride Request ID:</label>
+                <input type="number" id="rideRequestId" name="rideRequestId" required>
+
+                <label for="status">Status:</label>
+                <select id="rideRequestStatus" name="status" required>
+                    <option value="PENDING">Pending</option>
+                    <option value="ACCEPTED">Accepted</option>
+                    <option value="REJECTED">Rejected</option>
+                    <option value="CANCELED">Canceled</option>
+                </select>
+
+                <button type="submit">Respond</button>
+            </form>
+        </div>
+        <div class="response-area" id="respondRequestResponse"></div>
+    </div>
+
+    <!-- Register A Customer -->
+
+    <div class="form-and-response">
+        <div class="form-container">
+            <h2>Register As Customer</h2>
+            <form id="registerCustomerForm">
+                <label for="name">Name: <span style="color: red;">*</span></label>
+                <input type="text" id="customerName" name="name" required>
+
+                <label for="email">Email: <span style="color: red;">*</span></label>
+                <input type="email" id="customerEmail" name="email" required>
+
+                <label for="phoneNumber">Phone: <span style="color: red;">*</span></label>
+                <input type="text" id="phoneNumber" name="phoneNumber" required>
+
+                <button type="submit">Register</button>
+            </form>
+        </div>
+        <div class="response-area" id="registerCustomerResponse"></div>
+    </div>
+
+</div>
+</body>
+</html>
