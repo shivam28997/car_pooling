@@ -11,6 +11,7 @@ import com.shivam.service.RideRequestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,7 +27,7 @@ public class RideRequestServiceImpl implements RideRequestService {
     private CustomerRepository customerRepository;
 
     @Override
-    public RideRequest createRideRequest(String CustomerEmailId, Long journeyId, String startPoint, String endPoint, String travelTime) {
+    public RideRequest createRideRequest(String CustomerEmailId, Long journeyId, String startPoint, String endPoint, LocalDateTime travelTime) {
         Customer customer = customerRepository.findByEmail(CustomerEmailId);
         Journey journey = (Journey) journeyRepository.findByStartPointAndEndPoint(startPoint, endPoint);
         RideRequest rideRequest = new RideRequest();

@@ -37,17 +37,16 @@ public class CustomerController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping("/requestRide")
+    @PostMapping("/requestRide/{customerId}/{journeyId}")
     public ResponseEntity<RideRequest> requestRide(
-            @RequestParam String email,
-            @RequestParam Long journeyId,
-            @RequestParam String startPoint,
-            @RequestParam String endPoint,
-            @RequestParam String travelTime) {
+            @PathVariable("customerId") Long customerId,
+            @PathVariable("journeyId") Long journeyId,
+            @RequestBody RideRequest rideRequest) {
 
-        RideRequest rideRequest = customerService.requestRide(email, journeyId, startPoint, endPoint, travelTime);
-        return ResponseEntity.ok(rideRequest);
+        RideRequest savedRideRequest = customerService.requestRide(customerId, journeyId, rideRequest);
+        return ResponseEntity.ok(savedRideRequest);
     }
+
 
     @PutMapping("/rideRequests/{id}")
     public ResponseEntity<RideRequest> updateRideRequest(@PathVariable Long id, @RequestBody RideRequest rideRequest) {

@@ -257,31 +257,31 @@
         <div class="response-area" id="viewJourneyResponse"></div>
     </div>
 
-    <!-- View Journeys By Owner -->
+    <!-- View Current Journey By Owner -->
     <div class="form-and-response">
         <div class="form-container">
-            <h2>View Journeys by Car Owner</h2>
-            <form id="viewJourneysByOwnerForm">
-                <label for="ownerIdView">Car Owner ID:</label>
-                <input type="number" id="ownerIdView" name="ownerId" required>
-                <button type="submit">View Journeys</button>
+            <h2>View Current Journey</h2>
+            <form id="getCurrentJourneyForm">
+                <label for="carOwnerIdC">Car Owner ID: <span style="color: red;">*</span></label>
+                <input type="text" id="carOwnerIdC" name="carOwnerIdC" required>
+                <button type="submit">View Current Journey</button>
             </form>
         </div>
-        <div class="response-area" id="viewJourneysByOwnerResponse"></div>
+        <div class="response-area" id="viewCurrentJourneyResponse"></div>
     </div>
 
     <!-- Journeys By Car Owner -->
 
     <div class="form-and-response">
         <div class="form-container">
-            <h2>Get Journeys by Car Owner</h2>
+            <h2>View All Journeys by Car Owner</h2>
             <form id="getJourneysForm">
                 <label for="carOwnerId">Car Owner ID:</label>
                 <input type="number" id="carOwnerIdJ" name="carOwnerIdJ" required>
                 <button type="submit">Get Journeys</button>
             </form>
         </div>
-        <div class="response-area" id="journeysResponse"></div>
+        <div class="response-area" id="viewJourneysByOwnerResponse"></div>
     </div>
 
     <!-- Join Journey -->
@@ -289,11 +289,11 @@
         <div class="form-container">
             <h2>Join Journey</h2>
             <form id="joinJourneyForm">
-                <label for="journeyIdJoin">Journey ID:</label>
-                <input type="number" id="journeyIdJoin" name="journeyId" required>
+                <label for="customerId">Customer ID:</label>
+                <input type="number" id="customerId" name="customerId" required>
 
-                <label for="riderId">Rider ID:</label>
-                <input type="number" id="riderId" name="riderId" required>
+                <label for="journeyIdL">Journey ID:</label>
+                <input type="number" id="journeyIdL" name="journeyIdL" required>
 
                 <label for="pickupLocation">Pickup Location:</label>
                 <select id="pickupLocation" name="pickupLocation" required>
@@ -304,6 +304,9 @@
                 <select id="dropoffLocation" name="dropoffLocation" required>
                     <!-- Options will be populated by JavaScript -->
                 </select>
+
+                <label for="travelTime">Requested Travel Time:</label>
+                <input type="datetime-local" id="travelTime" name="travelTime" required>
 
                 <button type="submit">Join Journey</button>
             </form>

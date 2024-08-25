@@ -77,7 +77,7 @@ public class CarOwnerController {
     }
 
     // Update an existing journey
-    @PutMapping("/car-owners/{carOwnerId}/journeys/{journeyId}")
+    @PutMapping("/{carOwnerId}/journeys/{journeyId}")
     public ResponseEntity<Journey> updateJourney(@PathVariable("carOwnerId") Long carOwnerId, @PathVariable("journeyId") Long journeyId, @RequestBody Journey updatedJourney) {
         Journey journey = carOwnerService.updateJourney(carOwnerId, journeyId, updatedJourney);
 
@@ -101,6 +101,13 @@ public class CarOwnerController {
     public ResponseEntity<List<Journey>> getJourneysByCarOwner(@PathVariable("carOwnerId") Long carOwnerId) {
         List<Journey> journeys = carOwnerService.getJourneysByCarOwner(carOwnerId);
         return ResponseEntity.ok(journeys);
+    }
+
+    // Get all journeys created by a specific car owner
+    @GetMapping("/{carOwnerId}/currentJourney")
+    public ResponseEntity<Journey> getCurrentJourneysByCarOwner(@PathVariable("carOwnerId") Long carOwnerId) {
+        Journey journey = carOwnerService.getJourneyByCarOwnerId(carOwnerId);
+        return ResponseEntity.ok(journey);
     }
 
     // Respond to a ride request (accept or reject)

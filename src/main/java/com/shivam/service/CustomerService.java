@@ -18,9 +18,6 @@ public interface CustomerService {
     // Get customer details by ID
     Optional<Customer> getCustomerById(Long customerId);
 
-    // Request to join a journey
-    RideRequest requestRide(String CustomerEmailId, Long journeyId, String requestedStartPoint, String requestedEndPoint, String requestedTravelTime);
-
     // Update a ride request
     RideRequest updateRideRequest(Long rideRequestId, RideRequest updatedRideRequest);
 
@@ -44,4 +41,6 @@ public interface CustomerService {
 
     // Make a payment for a journey
     void makePayment(Long journeyId, Long customerId, double amount);
+
+    RideRequest requestRide(Long customerId, Long journeyId, RideRequest rideRequest);
 }

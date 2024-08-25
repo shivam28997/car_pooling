@@ -21,6 +21,8 @@ public interface CarOwnerService {
     // Get a specific journey by ID
     Optional<Journey> getJourneyById(Long journeyId);
 
+    Journey getJourneyByCarOwnerId(Long CarOwnerId);
+
     // Get all journeys created by a specific car owner
     List<Journey> getJourneysByCarOwner(Long carOwnerId);
 

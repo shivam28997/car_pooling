@@ -214,7 +214,7 @@ document.getElementById('updateJourneyForm').addEventListener('submit', function
     const availableSeats = document.getElementById('updateSeats').value || undefined;
     const status = document.getElementById('updateStatus').value || undefined;
 
-    axios.put(`${API_BASE_URL}/car-owners/${carOwnerId}/journeys/${journeyId}`, {
+    axios.put(`${API_BASE_URL}/car-owner/${carOwnerId}/journeys/${journeyId}`, {
         startPoint,
         endPoint,
         availableSeats,
@@ -302,21 +302,56 @@ document.getElementById('getJourneysForm').addEventListener('submit', function(e
         });
 });
 
+// View current journey by car owner
+document.getElementById('getCurrentJourneyForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const carOwnerId = document.getElementById('carOwnerIdC').value;
+
+    axios.get(`${API_BASE_URL}/car-owner/${carOwnerId}/currentJourney`, {
+        auth: {
+            username,
+            password
+        }
+    })
+        .then(response => {
+            const journey = response.data;
+            if (journey) {
+                const details = `
+                    <p><strong>Journey ID:</strong> ${journey.id}</p>
+                    <p><strong>Start Point:</strong> ${journey.startPoint}</p>
+                    <p><strong>End Point:</strong> ${journey.endPoint}</p>
+                    <p><strong>Available Seats:</strong> ${journey.availableSeats}</p>
+                    <p><strong>Status:</strong> ${journey.status}</p>
+                `;
+                document.getElementById('viewCurrentJourneyResponse').innerHTML = details;
+            } else {
+                document.getElementById('viewCurrentJourneyResponse').innerHTML = '<p>No current journey in progress.</p>';
+            }
+            document.getElementById('getCurrentJourneyForm').reset();
+        })
+        .catch(error => {
+            console.error('Error fetching current journey by car owner:', error);
+            document.getElementById('viewCurrentJourneyResponse').innerHTML = '<p>Error fetching current journey. Please try again later.</p>';
+        });
+});
+
+
 // Join a journey
 
 document.getElementById('joinJourneyForm').addEventListener('submit', function(event) {
     event.preventDefault();
 
-    const journeyId = document.getElementById('journeyIdJoin').value;
-    const riderId = document.getElementById('riderId').value;
-    const pickupLocation = document.getElementById('pickupLocation').value;
-    const dropoffLocation = document.getElementById('dropoffLocation').value;
+    const journeyId = document.getElementById('journeyIdL').value;
+    const riderId = document.getElementById('customerId').value;
+    const requestedStartPoint = document.getElementById('pickupLocation').value;
+    const requestedEndPoint = document.getElementById('dropoffLocation').value;
+    const requestedTravelTime = document.getElementById('travelTime').value; // Format: yyyy-MM-ddTHH:mm
 
-    axios.post(`${API_BASE_URL}/api/customers/requestRide`, {
-        journeyId,
-        riderId,
-        pickupLocation,
-        dropoffLocation
+    axios.post(`${API_BASE_URL}/api/customers/requestRide/${riderId}/${journeyId}`, {
+        requestedStartPoint,
+        requestedEndPoint,
+        requestedTravelTime
     }, {
         auth: {
             username,
@@ -326,11 +361,12 @@ document.getElementById('joinJourneyForm').addEventListener('submit', function(e
         .then(response => {
             const joinResponse = response.data;
             const details = `
-            <p><strong>Journey ID:</strong> ${joinResponse.journeyId}</p>
-            <p><strong>Rider ID:</strong> ${joinResponse.riderId}</p>
-            <p><strong>Pickup Location:</strong> ${joinResponse.pickupLocation}</p>
-            <p><strong>Dropoff Location:</strong> ${joinResponse.dropoffLocation}</p>
+            <p><strong>Journey ID:</strong> ${joinResponse.journey.id}</p>
+            <p><strong>Customer ID:</strong> ${joinResponse.customer.id}</p>
+            <p><strong>Pickup Location:</strong> ${joinResponse.requestedStartPoint}</p>
+            <p><strong>Dropoff Location:</strong> ${joinResponse.requestedEndPoint}</p>
             <p><strong>Status:</strong> ${joinResponse.status}</p>
+            <p><strong>Requested Travel Time:</strong> ${joinResponse.requestedTravelTime}</p>
         `;
             document.getElementById('joinJourneyResponse').innerHTML = details;
             document.getElementById('joinJourneyForm').reset();

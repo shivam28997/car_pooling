@@ -153,8 +153,13 @@ public class CarOwnerServiceImpl implements CarOwnerService {
     }
 
     @Override
+    public Journey getJourneyByCarOwnerId(Long CarOwnerId) {
+        return journeyRepository.findByCarOwnerIdAndStatus(CarOwnerId, JourneyStatus.IN_PROGRESS);
+    }
+
+    @Override
     public List<Journey> getJourneysByCarOwner(Long carOwnerId) {
-        return journeyRepository.findByCarOwnerId(carOwnerId);
+        return journeyRepository.findAllByCarOwnerId(carOwnerId);
     }
 
     @Override

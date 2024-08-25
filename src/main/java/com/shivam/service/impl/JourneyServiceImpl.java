@@ -42,7 +42,7 @@ public class JourneyServiceImpl implements JourneyService {
 
     @Override
     public List<Journey> getJourneysByCarOwner(Long carOwnerId) {
-        return journeyRepository.findByCarOwnerId(carOwnerId);
+        return journeyRepository.findAllByCarOwnerId(carOwnerId);
     }
 
     @Override

@@ -17,7 +17,9 @@ public interface JourneyRepository extends CrudRepository<Journey, Long>, Custom
     Optional<Journey> findById(Long journeyId);
 
     // Find all journeys created by a specific car owner
-    List<Journey> findByCarOwnerId(Long carOwnerId);
+    List<Journey> findAllByCarOwnerId(Long carOwnerId);
+
+    Journey findByCarOwnerIdAndStatus(Long carOwnerId, JourneyStatus status);;
 
     // Find all available journeys
     List<Journey> findByStatus(JourneyStatus status);

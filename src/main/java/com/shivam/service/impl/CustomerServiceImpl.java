@@ -1,9 +1,7 @@
 package com.shivam.service.impl;
 
-import com.shivam.entity.Customer;
-import com.shivam.entity.Journey;
-import com.shivam.entity.JourneyStatus;
-import com.shivam.entity.RideRequest;
+import com.shivam.entity.*;
+import com.shivam.exception.ResourceNotFoundException;
 import com.shivam.repository.CustomerRepository;
 import com.shivam.repository.JourneyRepository;
 import com.shivam.repository.RideRequestRepository;
@@ -50,20 +48,23 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public RideRequest requestRide(String CustomerEmailId, Long journeyId, String requestedStartPoint, String requestedEndPoint, String requestedTravelTime) {
-        // Implement ride request logic
-        // This is a placeholder implementation
-        Journey journey = (Journey) journeyRepository.findByStartPointAndEndPoint(requestedStartPoint, requestedEndPoint);
+    public RideRequest requestRide(Long customerId, Long journeyId, RideRequest rideRequest) {
+        Optional<Customer> customer = customerRepository.findById(customerId);
+        Optional<Journey> journey = journeyRepository.findById(journeyId);
 
-        Customer customer = customerRepository.findByEmail(CustomerEmailId);
-        RideRequest rideRequest = new RideRequest();
-        rideRequest.setCustomer(customer);
-        rideRequest.setJourney(journey);
-        rideRequest.setRequestedStartPoint(requestedStartPoint);
-        rideRequest.setRequestedEndPoint(requestedEndPoint);
-        rideRequest.setRequestedTravelTime(requestedTravelTime);
-
-        return rideRequestRepository.save(rideRequest);
+        if (customer.isPresent() && journey.isPresent()) {
+            rideRequest.setCustomer(customer.get());
+            rideRequest.setJourney(journey.get());
+            rideRequest.setRequestedStartPoint(rideRequest.getRequestedStartPoint());
+            rideRequest.setRequestedEndPoint(rideRequest.getRequestedEndPoint());
+            rideRequest.setRequestedTravelTime(rideRequest.getRequestedTravelTime());
+            if (rideRequest.getStatus() == null) {
+                rideRequest.setStatus(RideRequestStatus.PENDING);
+            }
+            return rideRequestRepository.save(rideRequest);
+        } else {
+            throw new ResourceNotFoundException("Customer or Journey not found");
+        }
     }
 
     @Override

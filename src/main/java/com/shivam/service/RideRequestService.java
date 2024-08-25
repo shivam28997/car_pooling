@@ -3,13 +3,14 @@ package com.shivam.service;
 import com.shivam.entity.RideRequest;
 import com.shivam.entity.Journey;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 public interface RideRequestService {
 
     // Create a new ride request
-    RideRequest createRideRequest(String CustomerEmailId, Long journeyId, String startPoint, String endPoint, String travelTime);
+    RideRequest createRideRequest(String CustomerEmailId, Long journeyId, String startPoint, String endPoint, LocalDateTime travelTime);
 
     // Update an existing ride request
     RideRequest updateRideRequest(Long rideRequestId, RideRequest updatedRideRequest);

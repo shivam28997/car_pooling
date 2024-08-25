@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
-import java.util.Optional;
+import java.time.LocalDateTime;
 
 @Entity
 public class RideRequest {
@@ -28,8 +28,8 @@ public class RideRequest {
     @NotEmpty(message = "Requested end point cannot be empty")
     private String requestedEndPoint;
 
-    @NotEmpty(message = "Requested travel time cannot be empty")
-    private String requestedTravelTime; // Format could be "HH:mm"
+    @NotNull(message = "Requested travel time cannot be null")
+    private LocalDateTime requestedTravelTime; // Format could be "HH:mm"
 
     // Getters and Setters
     public Long getId() {
@@ -80,11 +80,11 @@ public class RideRequest {
         this.requestedEndPoint = requestedEndPoint;
     }
 
-    public String getRequestedTravelTime() {
+    public LocalDateTime getRequestedTravelTime() {
         return requestedTravelTime;
     }
 
-    public void setRequestedTravelTime(String requestedTravelTime) {
+    public void setRequestedTravelTime(LocalDateTime requestedTravelTime) {
         this.requestedTravelTime = requestedTravelTime;
     }
 
